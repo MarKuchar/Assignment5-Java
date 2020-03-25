@@ -29,4 +29,12 @@ public class Entry<K extends Comparable,V> {
         key = k;
         value = v;
     }
+
+    @Override
+    public String toString() {
+        return "Country code{" +
+                "code=" + key +
+                ", country=" + value +
+                '}';
+    }
 }
