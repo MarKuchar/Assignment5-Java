@@ -1,12 +1,10 @@
 package ca.ciccc;
 
 import java.util.*;
-import java.util.function.Predicate;
 
-public class ALPriorityQueue<E> implements VCPriorityQueue{
+public class ALPriorityQueue<K extends Comparable, V> implements VCPriorityQueue<K, V>{
     private static final int DEFAULT_INITIAL_CAPACITY = 11;
-    private int size;
-    private ArrayList<Entry> data;
+    private ArrayList<Entry<K, V>> data;
 
     public ALPriorityQueue() {
         this.data = new ArrayList<>(DEFAULT_INITIAL_CAPACITY);
@@ -20,19 +18,13 @@ public class ALPriorityQueue<E> implements VCPriorityQueue{
         }
     }
 
-
-    public ALPriorityQueue(Collection<? extends E> c) {  // What does it mean?
-        // this.data = new ArrayList<Entry>(Arrays.asList(c));
-    }
-
-
     /**
      * Returns the number of items in the priority queue.
      * @return number of items
      */
     @Override
     public int size() {
-        return size;
+        return data.size();
     }
 
     /**
@@ -41,7 +33,7 @@ public class ALPriorityQueue<E> implements VCPriorityQueue{
      */
     @Override
     public boolean isEmpty() {
-        return (size == 0);
+        return data.isEmpty();
     }
 
     /**
@@ -52,24 +44,13 @@ public class ALPriorityQueue<E> implements VCPriorityQueue{
      * @throws IllegalArgumentException if the key is unacceptable for this queue
      */
     @Override
-    public Entry enqueue(Comparable key, Object value) {
-        Entry newEntry = new Entry(key, value);
+    public Entry<K, V> enqueue(K key, V value) {
+        Entry<K, V> newEntry = new Entry<>(key, value);
         if (key == null) {
             throw new IllegalArgumentException("Invalid key.");
-        } else if (size == 0) {
-            data.add(newEntry);
-            size += 1;
-            return newEntry;
-        } else {
-            for (int i = 0; i < size; i++) {
-                if (data.get(i).getKey().compareTo(key) > 0) {
-                    data.add(i, newEntry);
-                    size += 1;
-                    return newEntry;
-                }
-            }
         }
-        return null;
+        data.add(newEntry);
+        return newEntry;
     }
 
     /**
@@ -77,28 +58,36 @@ public class ALPriorityQueue<E> implements VCPriorityQueue{
      * @return entry having a minimal key (or null if empty)
      */
     @Override
-    public Entry peek() {
-        if (size == 0) {
+    public Entry<K, V> peek() {
+        if (data.size() == 0) {
             return null;
-        } else {
-            return data.get(0);
         }
-    }
+        Entry<K, V> highestPriority = data.get(0);
+        for (Entry<K, V> datum : data) {
+            if (datum.getKey().compareTo(highestPriority.getKey()) < 0) {
+                highestPriority = datum;
+            }
+        }
+        return highestPriority;
+        }
 
     /**
      * Removes and returns an entry with minimal key.
      * @return the removed entry (or null if empty)
      */
     @Override
-    public Entry dequeueMin() {
-        if (size == 0) {
+    public Entry<K, V> dequeueMin() {
+        if (data.size() == 0) {
             return null;
-        } else {
-            Entry pollEntry = data.get(0);
-            data.remove(0);
-            size -= 1;
-            return pollEntry;
         }
+        Entry<K, V> highestPriority = data.get(0);
+        for (Entry<K, V> datum : data) {
+            if (datum.getKey().compareTo(highestPriority.getKey()) < 0) {
+                highestPriority = datum;
+            }
+        }
+        data.remove(highestPriority);
+        return highestPriority;
     }
 
     /**
@@ -106,49 +95,49 @@ public class ALPriorityQueue<E> implements VCPriorityQueue{
      * @return the merged priority queue
      */
     @Override
-    public VCPriorityQueue merge(VCPriorityQueue other) {
-        ALPriorityQueue mergedPriorityQueue = new ALPriorityQueue();
+    public VCPriorityQueue<K, V> merge(VCPriorityQueue<K, V> other) {
         if (other.size() == 0 && data.size() == 0) {
             return null;
-        } else if (other.size() == 0) {
-            for (int i = 0; i < data.size(); i++) {
-                mergedPriorityQueue.enqueue(data.get(i).getKey(), data.get(i).getValue());
-            }
-            return mergedPriorityQueue;
-        } else if (data.size() == 0) {
-            for (int i = 0; i < other.size(); i++) {
-                Entry newEntry = new Entry(other.peek().getKey(), other.peek().getValue());
-                mergedPriorityQueue.enqueue(other.peek().getKey(), other.peek().getValue());
-                data.add(newEntry);
-                other.dequeueMin();
-            }
-            return mergedPriorityQueue;
-        } else {
-            while (!other.isEmpty()) {
-                Entry newEntry = new Entry(other.peek().getKey(), other.peek().getValue());
-                for (int j = 0; j < size; j++) {
-                    if (data.get(j).getKey().compareTo(newEntry.getKey()) > 0) {
-                        data.add(j, newEntry);
-                        other.dequeueMin();
-                        break;
-                    }
-                }
-                size += 1;
-            }
-            for (int i = 0; i < data.size(); i++) {
-                mergedPriorityQueue.enqueue(data.get(i).getKey(), data.get(i).getValue());
-            }
-            return mergedPriorityQueue;
         }
+        while (!other.isEmpty()) {
+            Entry<K, V> newEntry = other.dequeueMin();
+            data.add(newEntry);
+        }
+        return this;
     }
 
     @Override
     public String toString() {
         String ALPriorityQueue = "";
-        for (Entry entry : data) {
+        for (Entry<K, V> entry : data) {
             ALPriorityQueue += entry.toString() + "\n";
         }
         return ALPriorityQueue;
+    }
+    public static void main(String[] args) {
+        ALPriorityQueue<String, String> test = new ALPriorityQueue<>();
+        ALPriorityQueue<String, String> test2 = new ALPriorityQueue<>();
+
+        System.out.println(test.enqueue("sk", "Slovakia"));
+        System.out.println(test.enqueue("pl","Poland"));
+        test.enqueue("cz", "Czech Republic");
+        test.enqueue("ca", "Canada");
+        test.enqueue("no", "Norway");
+
+        test2.enqueue("gb", "Great Britain");
+        test2.enqueue("au", "Australia");
+        test2.enqueue("fr", "France");
+
+        System.out.println(test.isEmpty());
+        System.out.println(test.size()); // Is there size?
+        System.out.println(test.dequeueMin());
+        System.out.println(test);
+        System.out.println(test.size());
+        System.out.println(test.peek());
+        System.out.println(test.size());
+        System.out.println(test.merge(test2));
+        System.out.println(test);
+        System.out.println(test.size());
     }
 
 }
