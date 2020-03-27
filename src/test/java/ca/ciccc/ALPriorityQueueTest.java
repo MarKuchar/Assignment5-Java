@@ -9,46 +9,42 @@ import static org.junit.Assert.*;
 public class ALPriorityQueueTest {
 
     private static ALPriorityQueue<String, String> alPriorityQueue;
+    private static ALPriorityQueue<String, String> alPriorityQueue2;
 
     @Before
     public void setup() {
         alPriorityQueue = new ALPriorityQueue<>();
+        alPriorityQueue2 = new ALPriorityQueue<>();
     }
 
     @Test
     public void size() {
         assertEquals("Invalid", 0, alPriorityQueue.size());
-        alPriorityQueue.enqueue("cz", "Czech Republic");
-        alPriorityQueue.enqueue("ca", "Canada");
-        assertEquals("Invalid", 2, alPriorityQueue.size());
-
+        alPriorityQueue.enqueue("sk", "Slovakia");
+        assertEquals("Invalid", 1, alPriorityQueue.size());
     }
 
     @Test
     public void isEmpty() {
         assertTrue("Invalid", alPriorityQueue.isEmpty());
-        Entry<String, String> slovensko = alPriorityQueue.enqueue("sk", "Slovakia");
-        assertFalse("Invalid", alPriorityQueue.isEmpty());
     }
 
     @Test
     public void enqueue() {
-        alPriorityQueue.enqueue("sk", "Slovakia");
-        assertEquals("Invalid!", "Country code{code=sk, country=Slovakia}", alPriorityQueue.enqueue("sk", "Slovakia").toString());
-        Entry<String, String> slovensko = alPriorityQueue.enqueue("sk", "Slovakia");
-        assertEquals("Invalid!", "Slovakia", slovensko.value);
-        assertFalse("Invalid!", alPriorityQueue.isEmpty());
+        assertEquals("Invalid!", "Country code{code=es, country=Spain}", alPriorityQueue.enqueue("es", "Spain").toString());
+        Entry<String, String> Denmark = alPriorityQueue.enqueue("dk", "Denmark");
+        assertEquals("Invalid!", "Denmark", Denmark.value);
+        assertEquals("Invalid", 2, alPriorityQueue.size());
     }
 
     @Test
     public void peek() {
-        assertNull("Invalid!", alPriorityQueue.peek());
-        alPriorityQueue.enqueue("sk", "Slovakia");
-        assertEquals("Ivalid!", "Country code{code=sk, country=Slovakia}", alPriorityQueue.peek().toString());
         alPriorityQueue.enqueue("cz", "Czech Republic");
         alPriorityQueue.enqueue("ca", "Canada");
         alPriorityQueue.enqueue("no", "Norway");
         assertEquals("Invalid", "Country code{code=ca, country=Canada}", alPriorityQueue.peek().toString());
+        alPriorityQueue.enqueue("be", "Belgium");
+        assertEquals("Invalid!", "Country code{code=be, country=Belgium}", alPriorityQueue.peek().toString());
     }
 
     @Test
@@ -56,16 +52,23 @@ public class ALPriorityQueueTest {
         alPriorityQueue.enqueue("cz", "Czech Republic");
         alPriorityQueue.enqueue("ca", "Canada");
         alPriorityQueue.enqueue("no", "Norway");
-//        assertNull("Invalid!", alPriorityQueue.peek());
-        alPriorityQueue.enqueue("cz", "Czech Republic");
-
+        assertEquals("Invalid!", "Country code{code=ca, country=Canada}", alPriorityQueue.dequeueMin().toString());
+        assertEquals("Invalid!", "Country code{code=cz, country=Czech Republic}", alPriorityQueue.peek().toString());
+        assertEquals("Invalid!", "Country code{code=cz, country=Czech Republic}", alPriorityQueue.dequeueMin().toString());
+        assertEquals("Invalid!", "Country code{code=no, country=Norway}", alPriorityQueue.dequeueMin().toString());
     }
 
     @Test
     public void merge() {
-    }
+        alPriorityQueue.enqueue("cz", "Czech Republic");
+        alPriorityQueue.enqueue("ca", "Canada");
+        alPriorityQueue.enqueue("no", "Norway");
 
-    @Test
-    public void testToString() {
+        alPriorityQueue2.enqueue("gb", "Great Britain");
+        alPriorityQueue2.enqueue("au", "Australia");
+        alPriorityQueue2.enqueue("fr", "France");
+        alPriorityQueue.merge(alPriorityQueue2);
+        assertEquals("Invalid", 6, alPriorityQueue.size());
+        assertEquals("Invalid", "Country code{code=au, country=Australia}", alPriorityQueue.peek().toString());
     }
 }

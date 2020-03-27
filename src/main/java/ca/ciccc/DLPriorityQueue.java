@@ -37,7 +37,7 @@ public class DLPriorityQueue<K extends Comparable, V> implements VCPriorityQueue
      */
     @Override
     public Entry<K, V> enqueue(K key, V value) {
-        Entry newEntry = new Entry(key, value);
+        Entry<K, V> newEntry = new Entry<K, V>(key, value);
         if (key == null) {
             throw new IllegalArgumentException("Invalid key.");
         }
@@ -45,80 +45,12 @@ public class DLPriorityQueue<K extends Comparable, V> implements VCPriorityQueue
         return newEntry;
     }
 
-        /*
-  for (int i = 0; i < size; i++) {
-                if (data.get(i).getKey().compareTo(key) > 0) {
-                    data.add(i, newEntry);
-                    size += 1;
-                    return newEntry;
-
-        Entry newEntry = new Entry(key, value);
-        Node tempHead = head;
-        Node tempTail = tail;
-        Node newNode = new Node(newEntry, null, null);
-        if (key == null) {
-            throw new IllegalArgumentException("Invalid key.");
-        }
-        if (size == 0) {
-            tail = newNode;
-            head = newNode;
-            size++;
-            return newEntry;
-        } else if (size == 1) {
-            if (tempTail.data.getKey().compareTo(key) > 0) {
-                head.prev = newNode;
-                newNode.next = head;
-                head = newNode;
-            } else {
-                Node nextNode = tempHead.next;
-                nextNode.prev = newNode;
-                newNode.next = nextNode;
-                newNode.prev = tempHead;
-                head.next = newNode;
-            }
-        } else if (size > 1) {
-            while (tempHead.data.getKey().compareTo(key) < 0) {
-                if (tempHead.next == null) {
-                    newNode.prev = tail;
-                    tail.next = newNode;
-                    newNode = tail;
-                    size++;
-                    return newEntry;
-                } else {
-                    tempHead = tempHead.next;
-                }
-            }
-            if (tempHead == head) {
-                newNode.next = head;
-                head.prev = newNode;
-                head = newNode;
-            } else if (tempHead == tail) {
-                Node previousNode = tempTail.prev;
-                previousNode.next = newNode;
-                newNode.next = tail;
-                newNode.prev = previousNode;
-                tail.prev = newNode;
-            } else {
-                Node previousNode = tempTail.prev;
-                previousNode.prev = tempTail.prev.prev;
-                previousNode.next = newNode;
-                newNode.next = tempTail;
-                newNode.prev = previousNode;
-                tempTail.prev = newNode;
-            }
-        }
-        size++;
-        return newEntry;
-        }
-
-         */
-
     /**
      * Returns (but does not remove) an entry with minimal key.
      * @return entry having a minimal key (or null if empty)
      */
     @Override
-    public Entry peek() {
+    public Entry<K, V> peek() {
         if (data.isEmpty()) {
             return null;
         }
@@ -136,7 +68,7 @@ public class DLPriorityQueue<K extends Comparable, V> implements VCPriorityQueue
      * @return the removed entry (or null if empty)
      */
     @Override
-    public Entry dequeueMin() {
+    public Entry<K, V> dequeueMin() {
      if (data.isEmpty()) {
         return null;
     }
@@ -155,12 +87,12 @@ public class DLPriorityQueue<K extends Comparable, V> implements VCPriorityQueue
      * @return the merged priority queue
      */
     @Override
-    public VCPriorityQueue merge(VCPriorityQueue other) {
+    public VCPriorityQueue<K, V> merge(VCPriorityQueue<K, V> other) {
         if (other.size() == 0 && data.size() == 0) {
             return null;
         } else {
             while (!other.isEmpty()) {
-                Entry newEntry = other.dequeueMin();
+                Entry<K, V> newEntry = other.dequeueMin();
                 data.add(newEntry);
             }
             return this;
@@ -172,34 +104,5 @@ public class DLPriorityQueue<K extends Comparable, V> implements VCPriorityQueue
         return "DLPriorityQueue{" +
                 "data=" + data +
                 '}';
-    }
-
-    public static void main(String[] args) {
-        DLPriorityQueue<String, String> test = new DLPriorityQueue<>();
-        DLPriorityQueue<String, String> test2 = new DLPriorityQueue<>();
-
-        System.out.println(test.enqueue("sk", "Slovakia"));
-        System.out.println(test.enqueue("pl","Poland"));
-        test.enqueue("cz", "Czech Republic");
-        test.enqueue("ca", "Canada");
-        test.enqueue("no", "Norway");
-
-        test2.enqueue("gb", "Great Britain");
-        test2.enqueue("au", "Australia");
-        test2.enqueue("fr", "France");
-
-        System.out.println(test.isEmpty());
-        System.out.println(test.size());
-        System.out.println(test.peek());
-        System.out.println(test.dequeueMin());
-        System.out.println(test);
-        System.out.println(test.size());
-        System.out.println(test.peek());
-        System.out.println(test.size());
-        System.out.println(test.merge(test2));
-        System.out.println(test);
-        System.out.println(test.peek());
-        System.out.println(test.dequeueMin());
-        System.out.println(test.size());
     }
 }
