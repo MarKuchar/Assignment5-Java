@@ -19,9 +19,7 @@ class Practice {
             }
         }
 
-        private static final int DEFAULT_INITIAL_CAPACITY = 11;
         private Node head;
-        private Node tail;
         public PracticePriorityQueue() { }
 
         /**
@@ -68,17 +66,20 @@ class Practice {
 
             if (this.isEmpty()) {
                 head = newNode;
-            } else if (key.compareTo(head.entry.key) < 0) {
+            } else if (key.compareTo(actual.entry.key) < 0) {
                 head = newNode;
                 newNode.next = actual;
             } else {
                 while (actual.next != null) {
                     if (key.compareTo(actual.entry.key) > 0) {
                         actual = actual.next;
+                    } else {
+                        newNode.next = actual.next;
+                        actual.next = newNode;
+                        return newEntry;
                     }
-                    actual.next = newNode;
-                    newNode.next = actual.next;
                 }
+                actual.next = newNode;
             }
             return newEntry;
         }
@@ -89,7 +90,6 @@ class Practice {
          */
         @Override
         public Entry<K, V> peek() {
-
             return head.entry;
         }
 
@@ -99,6 +99,9 @@ class Practice {
          */
         @Override
         public Entry<K, V> dequeueMin() {
+            if (head == null) {
+                return null;
+            }
             Node actual = head;
             head = head.next;
             return actual.entry;
