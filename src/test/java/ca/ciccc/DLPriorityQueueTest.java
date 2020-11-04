@@ -7,13 +7,13 @@ import static org.junit.Assert.*;
 
 public class DLPriorityQueueTest {
 
-    private static DLPriorityQueue<String, String> dlPriorityQueue;
-    private static DLPriorityQueue<String, String> dlPriorityQueue2;
+    private static Practice.PracticePriorityQueue<String, String> dlPriorityQueue;
+    private static Practice.PracticePriorityQueue<String, String> dlPriorityQueue2;
 
     @Before
     public void setup() {
-        dlPriorityQueue = new DLPriorityQueue<>();
-        dlPriorityQueue2 = new DLPriorityQueue<>();
+        dlPriorityQueue = new Practice.PracticePriorityQueue<>();
+        dlPriorityQueue2 = new Practice.PracticePriorityQueue<>();
     }
 
     @Test
