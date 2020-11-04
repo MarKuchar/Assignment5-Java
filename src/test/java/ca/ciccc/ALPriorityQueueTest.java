@@ -8,13 +8,13 @@ import static org.junit.Assert.*;
 
 public class ALPriorityQueueTest {
 
-    private static ALPriorityQueue<String, String> alPriorityQueue;
-    private static ALPriorityQueue<String, String> alPriorityQueue2;
+    private static Practice.PracticePriorityQueue<String, String> alPriorityQueue;
+    private static Practice.PracticePriorityQueue<String, String> alPriorityQueue2;
 
     @Before
     public void setup() {
-        alPriorityQueue = new ALPriorityQueue<>();
-        alPriorityQueue2 = new ALPriorityQueue<>();
+        alPriorityQueue = new Practice.PracticePriorityQueue<>();
+        alPriorityQueue2 = new Practice.PracticePriorityQueue<>();
     }
 
     @Test
