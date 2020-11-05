@@ -7,13 +7,13 @@ import static org.junit.Assert.*;
 
 public class BHPriorityQueueTest {
 
-    private static BHPriorityQueue<String, String> bhPriorityQueue;
-    private static BHPriorityQueue<String, String> bhPriorityQueue2;
+    private static Practice.PracticeBHPriorityQueue<String, String> bhPriorityQueue;
+    private static Practice.PracticeBHPriorityQueue<String, String> bhPriorityQueue2;
 
     @Before
     public void setup() {
-        bhPriorityQueue = new BHPriorityQueue<>();
-        bhPriorityQueue2 = new BHPriorityQueue<>();
+        bhPriorityQueue = new Practice.PracticeBHPriorityQueue<>();
+        bhPriorityQueue2 = new Practice.PracticeBHPriorityQueue<>();
     }
 
     @Test
@@ -51,6 +51,9 @@ public class BHPriorityQueueTest {
         bhPriorityQueue.enqueue("cz", "Czech Republic");
         bhPriorityQueue.enqueue("ca", "Canada");
         bhPriorityQueue.enqueue("no", "Norway");
+        bhPriorityQueue.enqueue("dn", "Germany");
+        bhPriorityQueue.enqueue("au", "Austria");
+        assertEquals("Invalid!", "Country code{code=au, country=Austria}", bhPriorityQueue.dequeueMin().toString());
         assertEquals("Invalid!", "Country code{code=ca, country=Canada}", bhPriorityQueue.dequeueMin().toString());
         assertEquals("Invalid!", "Country code{code=cz, country=Czech Republic}", bhPriorityQueue.peek().toString());
         assertEquals("Invalid!", "Country code{code=cz, country=Czech Republic}", bhPriorityQueue.dequeueMin().toString());
